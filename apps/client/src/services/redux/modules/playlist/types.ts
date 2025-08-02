@@ -1,9 +1,9 @@
-import { CollaborativeMode, SpotifyImage } from "../../../types";
+import { CollaborativeMode, TidalImage } from "../../../types";
 
 export interface Playlist {
   id: string;
   name: string;
-  images: SpotifyImage[];
+  images: TidalImage[];
 }
 
 export interface PlaylistTopSongsContext {

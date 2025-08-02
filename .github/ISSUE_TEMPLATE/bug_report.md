@@ -17,7 +17,7 @@ A clear and concise description of what you expected to happen.
 
 **Additional context**
 
-Please paste the docker-compose file you're using to host YourSpotify and their logs (you can skip mongo logs). If your issue have anything related to other tools, please paste their config too.
+Please paste the docker-compose file you're using to host YourTIDAL and their logs (you can skip mongo logs). If your issue have anything related to other tools, please paste their config too.
 
 **Screenshots**
 
@@ -25,4 +25,4 @@ If applicable, add screenshots to help explain your problem.
 
 **Shared link**
 
-If you don't mind, you can add a Shared link to this issue by clicking **Share this page** on your YourSpotify application so that I can identify the issue quicker.
+If you don't mind, you can add a Shared link to this issue by clicking **Share this page** on your YourTIDAL application so that I can identify the issue quicker.

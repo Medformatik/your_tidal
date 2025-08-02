@@ -6,7 +6,7 @@ export interface User {
   _id: Types.ObjectId;
   username: string;
   admin: boolean;
-  spotifyId: string | null;
+  tidalId: string | null;
   expiresIn: number;
   accessToken: string | null;
   refreshToken: string | null;
@@ -31,7 +31,7 @@ export const UserSchema = new Schema<User>(
   {
     username: { type: String, required: true },
     admin: { type: Boolean, default: false },
-    spotifyId: { type: String, required: true, unique: true, index: true },
+    tidalId: { type: String, required: true, unique: true, index: true },
     expiresIn: { type: Number, default: 0 },
     accessToken: { type: String, default: null },
     refreshToken: { type: String, default: null },

@@ -18,7 +18,7 @@ export default function UpdateChecker() {
     <div className={s.root}>
       <Link to="/" onClick={layoutContext.closeDrawer}>
         <Text onDark element="h1">
-          Your Spotify
+          Your TIDAL
         </Text>
       </Link>
     </div>

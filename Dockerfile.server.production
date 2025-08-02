@@ -2,7 +2,7 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-ENV MONGO_ENDPOINT=mongodb://mongo:27017/your_spotify
+ENV MONGO_ENDPOINT=mongodb://mongo:27017/your_tidal
 
 RUN apk add python3 gcc g++ make cmake
 

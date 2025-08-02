@@ -15,7 +15,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -27,12 +26,12 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        
+
       - name: Docker metadata
         id: docker-meta
         uses: docker/metadata-action@v5
         with:
-          images: yooooomi/your_spotify # required dummy value, will not be used
+          images: medformatik/your_tidal # required dummy value, will not be used
 
       - name: Login to DockerHub
         uses: docker/login-action@v3
@@ -56,10 +55,10 @@ jobs:
           push: true
           labels: ${{ steps.docker-meta.outputs.labels }}
           tags: |
-            yooooomi/your_spotify_client:nightly
-            yooooomi/your_spotify_client:${{ github.sha }}
-            ghcr.io/yooooomi/your_spotify_client:nightly
-            ghcr.io/yooooomi/your_spotify_client:${{ github.sha }}
+            medformatik/your_tidal_client:nightly
+            medformatik/your_tidal_client:${{ github.sha }}
+            ghcr.io/medformatik/your_tidal_client:nightly
+            ghcr.io/medformatik/your_tidal_client:${{ github.sha }}
 
       - name: Build and push server nightly
         uses: docker/build-push-action@v5
@@ -70,7 +69,7 @@ jobs:
           push: true
           labels: ${{ steps.docker-meta.outputs.labels }}
           tags: |
-            yooooomi/your_spotify_server:nightly
-            yooooomi/your_spotify_server:${{ github.sha }}
-            ghcr.io/yooooomi/your_spotify_server:nightly
-            ghcr.io/yooooomi/your_spotify_server:${{ github.sha }}
+            medformatik/your_tidal_server:nightly
+            medformatik/your_tidal_server:${{ github.sha }}
+            ghcr.io/medformatik/your_tidal_server:nightly
+            ghcr.io/medformatik/your_tidal_server:${{ github.sha }}

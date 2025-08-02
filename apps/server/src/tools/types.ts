@@ -2,7 +2,7 @@ import { Request } from "express";
 import { z } from "zod";
 import { GlobalPreferences } from "../database/schemas/globalPreference";
 import { User } from "../database/schemas/user";
-import { SpotifyAPI } from "./apis/spotifyApi";
+import { TidalAPI } from "./apis/tidalApi";
 
 export interface GlobalPreferencesRequest extends Request {
   globalPreferences: GlobalPreferences;
@@ -16,8 +16,8 @@ export interface OptionalLoggedRequest extends Request {
   user: User | null;
 }
 
-export interface SpotifyRequest extends Request {
-  client: SpotifyAPI;
+export interface TIDALRequest extends Request {
+  client: TidalAPI;
 }
 
 export enum Timesplit {

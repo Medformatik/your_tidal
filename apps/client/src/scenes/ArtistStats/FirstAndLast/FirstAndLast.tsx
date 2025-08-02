@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { SpotifyImage } from "../../../services/types";
+import { TidalImage } from "../../../services/types";
 import TitleCard from "../../../components/TitleCard";
 import IdealImage from "../../../components/IdealImage";
 import ImageTwoLines from "../../../components/ImageTwoLines";
@@ -7,8 +7,8 @@ import { DateFormatter } from "../../../services/date";
 import s from "./index.module.css";
 
 interface FirstAndLastProps {
-  firstImages: SpotifyImage[];
-  lastImages: SpotifyImage[];
+  firstImages: TidalImage[];
+  lastImages: TidalImage[];
   firstDate: Date;
   lastDate: Date;
   firstElement: ReactNode;

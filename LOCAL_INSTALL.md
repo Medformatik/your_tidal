@@ -4,7 +4,7 @@
 
 You will need to have
 
-- Git clone of this repo (you can `git clone git@github.com:Yooooomi/your_spotify.git --depth=1`)
+- Git clone of this repo
 - A mongo database
 - NodeJS
 
@@ -31,22 +31,22 @@ The environment variables are the same as in the docker-compose for server, with
 
 You can have the Mongo and backend running through systemd user units.
 
-- Create a systemd unit file in your home directory at `.config/systemd/user/` (create the folders if they don't exist) and name it something like `your_spotify.service`.
+- Create a systemd unit file in your home directory at `.config/systemd/user/` (create the folders if they don't exist) and name it something like `your_tidal.service`.
 
 File content should be something like (seperate one for MongoDB if needed):
 
 ```
 [Unit]
-Description=Your Spotify Backend
+Description=Your TIDAL Backend
 Wants=network-online.target mongodb.service
 After=syslog.target network.target nss-lookup.target network-online.target
 
 [Service]
-EnvironmentFile=/home/YOUR_USER/sites/applications/spotify/your_spotify/server/.env
+EnvironmentFile=/home/YOUR_USER/sites/applications/tidal/your_tidal/server/.env
 ExecStart=/home/YOUR_USER/.nvm/versions/node/v16.14.0/bin/node lib/bin/www
 StandardOutput=journal
 Restart=on-failure
-WorkingDirectory=/home/YOUR_USER/sites/applications/spotify/your_spotify/server
+WorkingDirectory=/home/YOUR_USER/sites/applications/tidal/your_tidal/server
 
 [Install]
 WantedBy=multi-user.target
@@ -73,5 +73,5 @@ WorkingDirectory=/home/YOUR_USER/filesystem/
 WantedBy=multi-user.target
 ```
 
-- Enable the services and start them with `systemctl --user --now enable mongodb` and `systemctl --user --now enable your_spotify`.
+- Enable the services and start them with `systemctl --user --now enable mongodb` and `systemctl --user --now enable your_tidal`.
 - The backend should have started up properly.

@@ -1,5 +1,5 @@
 import { Schema } from "mongoose";
-import { SpotifyImage } from "./types";
+import { TidalImage } from "./types";
 
 export interface Artist {
   external_urls: any;
@@ -7,13 +7,21 @@ export interface Artist {
   genres: string[];
   href: string;
   id: string;
-  images: SpotifyImage[];
+  images: TidalImage[];
   name: string;
   popularity: number;
   type: string;
   uri: string;
 }
-export type SpotifyArtist = Artist;
+
+export type TidalArtist = {
+  id: string;
+  type: string;
+  attributes: {
+    name: string;
+    popularity?: number;
+  };
+};
 
 export const ArtistSchema = new Schema<Artist>(
   {

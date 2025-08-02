@@ -19,7 +19,7 @@ export class PromiseQueue {
         const data = await item.fn();
         item.onResolve(data);
       } catch (e) {
-        item.onError(e);
+        item.onError(e instanceof Error ? e : new Error(String(e)));
       }
       await wait(1000);
       this.q.shift();

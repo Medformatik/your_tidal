@@ -1,34 +1,34 @@
 /* eslint-disable no-await-in-loop */
-import { readFile, unlink } from "fs/promises";
-import { z } from "zod";
+import { readFile, unlink } from 'fs/promises';
+import { z } from 'zod';
 import {
   addTrackIdsToUser,
   getCloseTrackId,
   storeFirstListenedAtIfLess,
-} from "../../database";
-import { setImporterStateCurrent } from "../../database/queries/importer";
-import { RecentlyPlayedTrack } from "../../database/schemas/track";
-import { User } from "../../database/schemas/user";
+} from '../../database';
+import { setImporterStateCurrent } from '../../database/queries/importer';
+import { RecentlyPlayedTrack } from '../../database/schemas/track';
+import { User } from '../../database/schemas/user';
 import {
   getTracksAlbumsArtists,
   storeTrackAlbumArtist,
-} from "../../spotify/dbTools";
-import { logger } from "../logger";
+} from '../../tidal/dbTools';
+import { logger } from '../logger';
 import {
   beforeParenthesis,
   minOfArray,
   removeDiacritics,
   retryPromise,
-} from "../misc";
-import { SpotifyAPI } from "../apis/spotifyApi";
-import { Unpack } from "../types";
-import { Infos } from "../../database/schemas/info";
-import { getFromCache, setToCache, SpotifyTrackCacheItem } from "./cache";
+} from '../misc';
+import { TidalAPI } from '../apis/tidalApi';
+import { Unpack } from '../types';
+import { Infos } from '../../database/schemas/info';
+import { getFromCache, setToCache, TidalTrackCacheItem } from './cache';
 import {
   HistoryImporter,
   ImporterStateTypes,
   PrivacyImporterState,
-} from "./types";
+} from './types';
 
 const privacyFileSchema = z.array(
   z.object({
@@ -52,19 +52,19 @@ export class PrivacyImporter
 
   private currentItem: number;
 
-  private spotifyApi: SpotifyAPI;
+  private tidalApi: TidalAPI;
 
   constructor(user: User) {
-    this.id = "";
+    this.id = '';
     this.userId = user._id.toString();
     this.elements = null;
     this.currentItem = 0;
-    this.spotifyApi = new SpotifyAPI(this.userId);
+    this.tidalApi = new TidalAPI(this.userId);
   }
 
   search = async (track: string, artist: string) => {
     const res = await retryPromise(
-      () => this.spotifyApi.search(track, artist),
+      () => this.tidalApi.search(track, artist),
       10,
       30,
     );
@@ -77,7 +77,7 @@ export class PrivacyImporter
       items.map(it => it.track),
     );
     await storeTrackAlbumArtist({ tracks, albums, artists });
-    const finalInfos: Omit<Infos, "owner">[] = [];
+    const finalInfos: Omit<Infos, 'owner'>[] = [];
     for (let i = 0; i < items.length; i += 1) {
       const item = items[i]!;
       const date = new Date(`${item.played_at}Z`);
@@ -92,11 +92,11 @@ export class PrivacyImporter
       );
       if (duplicate.length > 0 || currentImportDuplicate) {
         logger.info(
-          `${item.track.name} - ${item.track.artists[0]?.name} was duplicate`,
+          `${item.track.attributes.title} - ${item.track.relationships.artists.data[0]?.id} was duplicate`,
         );
         continue;
       }
-      const [primaryArtist] = item.track.artists;
+      const [primaryArtist] = item.track.relationships.artists.data;
       if (!primaryArtist) {
         continue;
       }
@@ -104,9 +104,9 @@ export class PrivacyImporter
         played_at: date,
         id: item.track.id,
         primaryArtistId: primaryArtist.id,
-        albumId: item.track.album.id,
-        artistIds: item.track.artists.map(e => e.id),
-        durationMs: item.track.duration_ms,
+        albumId: item.track.relationships.album.data.id,
+        artistIds: item.track.relationships.artists.data.map((e: any) => e.id),
+        durationMs: item.track.attributes.duration * 1000, // TIDAL uses seconds, convert to ms
       });
     }
     await setImporterStateCurrent(this.id, this.currentItem + 1);
@@ -127,8 +127,8 @@ export class PrivacyImporter
       return content;
     }
     logger.error(
-      "If you submitted the right files and this error comes up, please open an issue with the following logs at https://github.com/Yooooomi/your_spotify",
-      JSON.stringify(value.error.issues, null, " "),
+      'If you submitted the right files and this error comes up, please open an issue with the following logs at https://github.com/Medformatik/your_tidal',
+      JSON.stringify(value.error.issues, null, ' '),
     );
     return null;
   };
@@ -168,7 +168,7 @@ export class PrivacyImporter
   trySearching = async (
     artistName: string,
     trackName: string,
-  ): Promise<SpotifyTrackCacheItem> => {
+  ): Promise<TidalTrackCacheItem> => {
     let found = await this.search(
       removeDiacritics(trackName),
       removeDiacritics(artistName),
@@ -182,7 +182,20 @@ export class PrivacyImporter
     if (!found) {
       return { exists: false };
     }
-    return { exists: true, track: found };
+    // Convert TidalTrackResource to TidalTrack format
+    const tidalTrack = {
+      ...found,
+      attributes: {
+        ...found.attributes,
+        explicit: false, // Default value since TidalTrackResource doesn't include this
+        duration: found.attributes.duration || 0,
+      },
+      relationships: {
+        artists: found.relationships?.artists || { data: [] },
+        album: found.relationships?.albums?.data?.[0] ? { data: found.relationships.albums.data[0] } : { data: { id: '', type: 'album' } },
+      }
+    };
+    return { exists: true, track: tidalTrack };
   };
 
   run = async (id: string) => {
@@ -229,7 +242,7 @@ export class PrivacyImporter
         continue;
       }
       logger.info(
-        `Adding ${item.track.name} - ${item.track.artists[0]?.name} from data (${i}/${this.elements.length})`,
+        `Adding ${item.track.attributes.title} - ${item.track.relationships.artists.data[0]?.id} from data (${i}/${this.elements.length})`,
       );
       items.push({ track: item.track, played_at: content.endTime });
       if (items.length >= 20) {

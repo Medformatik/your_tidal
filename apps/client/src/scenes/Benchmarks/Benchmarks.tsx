@@ -160,7 +160,7 @@ export default function Benchmarks() {
       },
       request: async (bestTrackId: string) => api.getTrackStats(bestTrackId),
     },
-  ] as const satisfies Request<any>[];
+  ] as const;
 
   const run = async (req: Request<any>) => {
     setElapsedTime(prev => ({ ...prev, [req.title]: NOT_FINISHED_REQUEST }));

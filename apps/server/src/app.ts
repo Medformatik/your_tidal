@@ -6,7 +6,7 @@ import cors from "cors";
 
 import { router as indexRouter } from "./routes";
 import { router as oauthRouter } from "./routes/oauth";
-import { router as spotifyRouter } from "./routes/spotify";
+import { router as tidalRouter } from "./routes/tidal";
 import { router as globalRouter } from "./routes/global";
 import { router as artistRouter } from "./routes/artist";
 import { router as albumRouter } from "./routes/album";
@@ -17,7 +17,7 @@ import { router as metricsRouter } from "./routes/metrics";
 import { get } from "./tools/env";
 import { logger, LogLevelAccepts } from "./tools/logger";
 import { measureRequestDuration } from "./tools/middleware";
-import { ErrorTypeToHTTPCode, YourSpotifyError } from "./tools/errors/error";
+import { ErrorTypeToHTTPCode, YourTidalError } from "./tools/errors/error";
 import { IncomingMessage } from "http";
 
 const app = express();
@@ -33,7 +33,7 @@ if (corsValue?.[0] === ALLOW_ALL_CORS) {
 
 // Mask certain query params in logs
 const maskedSearchParams: Record<string, Set<string>> = {
-  "/oauth/spotify/callback": new Set(["code"]),
+  "/oauth/tidal/callback": new Set(["code"]),
 };
 
 morgan.token<IncomingMessage & { originalUrl?: string }>("url", req => {
@@ -90,7 +90,7 @@ app.use(express.json());
 
 app.use("/", indexRouter);
 app.use("/oauth", oauthRouter);
-app.use("/spotify", spotifyRouter);
+app.use("/tidal", tidalRouter);
 app.use("/global", globalRouter);
 app.use("/artist", artistRouter);
 app.use("/album", albumRouter);
@@ -104,7 +104,7 @@ app.use((error: any, req: any, res: any, next: any) => {
     return next();
   }
   logger.error(error);
-  if (error instanceof YourSpotifyError) {
+  if (error instanceof YourTidalError) {
     return res.status(ErrorTypeToHTTPCode[error.type]).send(error);
   }
   return res.status(500).send(error);

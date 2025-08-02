@@ -1,15 +1,15 @@
-import { SpotifyTrack } from "../../database/schemas/track";
+import { TidalTrack } from "../../database/schemas/track";
 import { getWithDefault } from "../env";
 
 const maxCacheSize = getWithDefault("MAX_IMPORT_CACHE_SIZE", 100000);
 
-export type SpotifyTrackCacheItem =
+export type TidalTrackCacheItem =
   | {
       exists: false;
     }
-  | { exists: true; track: SpotifyTrack };
+  | { exists: true; track: TidalTrack };
 
-const cache: Record<string, Record<string, SpotifyTrackCacheItem>> = {};
+const cache: Record<string, Record<string, TidalTrackCacheItem>> = {};
 
 function getKey(track: string, artist: string) {
   return `${track}-${artist}`;
@@ -26,7 +26,7 @@ export function getFromCache(
   userId: string,
   track: string,
   artist: string,
-): SpotifyTrackCacheItem | undefined {
+): TidalTrackCacheItem | undefined {
   const key = getKey(track, artist);
   return getFromCacheString(userId, key);
 }
@@ -34,7 +34,7 @@ export function getFromCache(
 export function setToCacheString(
   userId: string,
   str: string,
-  trackObject: SpotifyTrackCacheItem,
+  trackObject: TidalTrackCacheItem,
 ) {
   const userCache = cache[userId] ?? {};
   const keys = Object.keys(cache[userId] ?? {});
@@ -50,7 +50,7 @@ export function setToCache(
   userId: string,
   track: string,
   artist: string,
-  trackObject: SpotifyTrackCacheItem,
+  trackObject: TidalTrackCacheItem,
 ) {
   const key = getKey(track, artist);
   setToCacheString(userId, key, trackObject);

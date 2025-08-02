@@ -1,6 +1,6 @@
 services:
   server:
-    image: yooooomi/your_spotify_server
+    image: medformatik/your_tidal_server
     restart: always
     ports:
       - "8080:8080"
@@ -9,20 +9,20 @@ services:
     depends_on:
       - mongo
     environment:
-      API_ENDPOINT: http://localhost:8080 # This MUST be included as a valid URL in the spotify dashboard
+      API_ENDPOINT: http://localhost:8080 # This MUST be included as a valid URL in the TIDAL dashboard
       CLIENT_ENDPOINT: http://localhost:3000
-      SPOTIFY_PUBLIC: __your_spotify_client_id__
-      SPOTIFY_SECRET: __your_spotify_secret__
+      TIDAL_CLIENT_ID: __your_tidal_client_id__
+      TIDAL_CLIENT_SECRET: __your_tidal_client_secret__
 
   mongo:
     container_name: mongo
     image: mongo:6
     restart: always
     volumes:
-      - ./your_spotify_db:/data/db
+      - ./your_tidal_db:/data/db
 
   web:
-    image: yooooomi/your_spotify_client
+    image: medformatik/your_tidal_client
     restart: always
     ports:
       - "3000:3000"

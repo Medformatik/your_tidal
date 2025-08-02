@@ -22,9 +22,9 @@ import DeleteUser from "./DeleteUser";
 import Importer from "./Importer";
 import s from "./index.module.css";
 import PublicToken from "./PublicToken";
-import RelogToSpotify from "./RelogToSpotify";
+import RelogToTidal from "./RelogToTidal";
 import SetAdmin from "./SetAdmin";
-import SpotifyAccountInfos from "./SpotifyAccountInfos";
+import TidalAccountInfos from "./TidalAccountInfos";
 import Timezone from "./Timezone";
 import DateFormat from "./DateFormat";
 import { StatMeasurement } from "./StatMeasurement";
@@ -65,7 +65,7 @@ export default function Settings() {
     <div>
       <Header
         title="Settings"
-        subtitle="Here are the settings for Your Spotify, anyone with an account can access this page"
+        subtitle="Here are the settings for Your TIDAL, anyone with an account can access this page"
         hideInterval
       />
       <ButtonsHeader items={tabs} />
@@ -83,10 +83,10 @@ export default function Settings() {
                   />
                 )}
                 {sme && !isPublic && (
-                  <SpotifyAccountInfos spotifyAccount={sme} />
+                  <TidalAccountInfos tidalAccount={sme} />
                 )}
                 <DarkMode />
-                {!isPublic && <RelogToSpotify />}
+                {!isPublic && <RelogToTidal />}
                 {!isPublic && <Importer />}
                 {!isPublic && <PublicToken />}
               </Masonry>

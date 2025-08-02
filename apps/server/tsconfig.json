@@ -1,5 +1,5 @@
 {
-  "extends": "@your_spotify/dev/tsconfig.json",
+  "extends": "@your_tidal/dev/tsconfig.json",
   "compilerOptions": {
     "outDir": "lib",
   }

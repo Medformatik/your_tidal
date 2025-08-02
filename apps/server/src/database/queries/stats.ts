@@ -31,7 +31,7 @@ export const ItemType = {
     field: "$primaryArtistId",
     collection: "artists",
   },
-} as const satisfies Record<string, ItemType>;
+} as const;
 
 export const getMostListenedSongs = async (
   user: User,

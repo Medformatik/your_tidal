@@ -77,7 +77,7 @@ export const presetIntervals = [
     unit: "year",
     interval: { timesplit: Timesplit.month, start: startOfThisYear, end: now },
   },
-] as const satisfies PresetIntervalDetail[];
+] as const;
 
 export const userBasedIntervals: UserBasedIntervalDetails[] = [
   {

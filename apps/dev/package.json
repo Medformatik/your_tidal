@@ -1,5 +1,5 @@
 {
-  "name": "@your_spotify/dev",
+  "name": "@your_tidal/dev",
   "version": "0.0.1",
   "private": true,
   "dependencies": {

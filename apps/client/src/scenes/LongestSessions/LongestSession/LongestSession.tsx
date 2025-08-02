@@ -25,12 +25,12 @@ export default function LongestSession({
   fullTracks,
 }: LongestSessionProps) {
   const artistIds = useMemo(
-    () => [
-      ...tracks.reduce((acc, track) => {
+    () => Array.from(
+      tracks.reduce((acc, track) => {
         acc.add(track.primaryArtistId);
         return acc;
-      }, new Set<string>()),
-    ],
+      }, new Set<string>())
+    ),
     [tracks],
   );
   const { loaded, artists } = useLoadArtists(artistIds);

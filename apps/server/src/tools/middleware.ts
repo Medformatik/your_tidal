@@ -11,13 +11,13 @@ import {
   GlobalPreferencesRequest,
   LoggedRequest,
   OptionalLoggedRequest,
-  SpotifyRequest,
+  TIDALRequest,
 } from "./types";
-import { SpotifyAPI } from "./apis/spotifyApi";
+import { TidalAPI } from "./apis/tidalApi";
 import { Metrics } from "./metrics";
-import { YourSpotifyError } from "./errors/error";
+import { YourTidalError } from "./errors/error";
 
-export class ValidationError extends YourSpotifyError {
+export class ValidationError extends YourTidalError {
   type = "MALFORMED" as const;
 
   constructor(validationError: Error) {
@@ -25,12 +25,12 @@ export class ValidationError extends YourSpotifyError {
   }
 }
 
-class NotLoggedError extends YourSpotifyError {
+class NotLoggedError extends YourTidalError {
   type = "UNAUTHORIZED" as const;
   code = "NOT_LOGGED";
 }
 
-class NotAdminError extends YourSpotifyError {
+class NotAdminError extends YourTidalError {
   type = "FORBIDDEN" as const;
   code = "NOT_ADMIN";
 }
@@ -52,7 +52,7 @@ export const validate = <
     return value;
   } catch (e) {
     logger.error(e);
-    throw new ValidationError(e);
+    throw new ValidationError(e instanceof Error ? e : new Error(String(e)));
   }
 };
 
@@ -166,8 +166,8 @@ export const withHttpClient = async (
 ) => {
   const { user } = req as LoggedRequest;
 
-  const client = new SpotifyAPI(user._id.toString());
-  (req as SpotifyRequest & LoggedRequest).client = client;
+  const client = new TidalAPI(user._id.toString());
+  (req as TIDALRequest & LoggedRequest).client = client;
   next();
 };
 
@@ -191,7 +191,7 @@ export const withGlobalPreferences = async (
   }
 };
 
-class AlreadyImportingError extends YourSpotifyError {
+class AlreadyImportingError extends YourTidalError {
   type = "CONFLICT" as const;
   code = "ALREADY_IMPORTING";
 }
@@ -233,7 +233,7 @@ export const measureRequestDuration = (
   next();
 };
 
-class AffinityNotAllowedError extends YourSpotifyError {
+class AffinityNotAllowedError extends YourTidalError {
   type = "UNAUTHORIZED" as const;
   code = "AFFINITY_NOT_ALLOWED";
 

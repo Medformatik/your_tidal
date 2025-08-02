@@ -31,7 +31,7 @@ export enum Precision {
   year = "year",
 }
 
-export interface SpotifyImage {
+export interface TidalImage {
   url: string;
   height: number;
   width: number;
@@ -44,7 +44,7 @@ export interface Artist {
   genres: string[];
   href: string;
   id: string;
-  images: SpotifyImage[];
+  images: TidalImage[];
   name: string;
   popularity: number;
   type: string;
@@ -62,7 +62,7 @@ export interface Album {
   genres: string[];
   href: string;
   id: string;
-  images: SpotifyImage[];
+  images: TidalImage[];
   name: string;
   popularity: number;
   release_date: string;
@@ -126,13 +126,13 @@ export interface DateId {
   hour?: number;
 }
 
-export interface SpotifyMe {
+export interface TidalMe {
   country: string;
   display_name: string;
   email: string;
   href: string;
   id: string;
-  images: SpotifyImage[];
+  images: TidalImage[];
   product: string;
   type: string;
   uri: string;

@@ -2157,6 +2157,39 @@
     "@svgr/plugin-svgo" "^5.5.0"
     loader-utils "^2.0.0"
 
+"@tidal-music/auth@1.3.4", "@tidal-music/auth@^1.3.4":
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/@tidal-music/auth/-/auth-1.3.4.tgz#7334acba235d08722d75e416a9c9e3d9e67913e3"
+  integrity sha512-eN2tBqsj9L20RpNpxWSwfArIAk2rHK6LH2wtQK4OIN2u4pDJU1WbFdcK0owj3eoEzSgudYORErjPedbvsSrOgA==
+  dependencies:
+    "@tidal-music/auth" "1.3.4"
+    "@tidal-music/common" "^0.1.5"
+    "@tidal-music/true-time" "^0.3.0"
+
+"@tidal-music/common@0.1.5", "@tidal-music/common@^0.1.5":
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@tidal-music/common/-/common-0.1.5.tgz#c7da8b19ef65d7cd9d8681c1447a123323c30c6e"
+  integrity sha512-C71JfsJ5P1CwObGTOlRH9vDjo4mruV5WeE6C0JmR8eVoivIaf1Ou9QCI7pDa7aWuCUjOOm3Dd5p5MkJ3aCDXHA==
+  dependencies:
+    "@tidal-music/common" "0.1.5"
+
+"@tidal-music/player-web-components@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@tidal-music/player-web-components/-/player-web-components-0.1.2.tgz#f5bad11b41ff3e83037c431e3e5e6a3411f62649"
+  integrity sha512-78e/W08B5fLolVh62RGRtEeosfvNO19N2bw4Wq1sKFro+p+Pu5k6X3ywjPOFc2f8/yFztTcw/R+hzEn04y3/gA==
+
+"@tidal-music/player@^0.9.1":
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/@tidal-music/player/-/player-0.9.1.tgz#8f69ef5440851133878fdc07c12df8a55b668315"
+  integrity sha512-sq+bqlBrlUqnhY+s1rqbnmuh/crquGICcOA5EyjqK9YfYtnsRTCgYKk6lEzdV2fPD/sJlzmWRljFU+Q1lTgK2Q==
+
+"@tidal-music/true-time@0.3.0", "@tidal-music/true-time@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@tidal-music/true-time/-/true-time-0.3.0.tgz#e57d347395993cebeb2674e54107e6d1596b2094"
+  integrity sha512-nO9DfLKLu5sCI/v6Yp8DSseu8qis0RI1r6l7oIFCusOAedkIbQT/K+ELaaz7cxXR4cboopUZGW55v4RVwxHE/g==
+  dependencies:
+    "@tidal-music/true-time" "0.3.0"
+
 "@tootallnate/once@1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"

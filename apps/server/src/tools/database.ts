@@ -20,7 +20,7 @@ import {
   getArtists,
   getTracks,
   storeTrackAlbumArtist,
-} from "../spotify/dbTools";
+} from "../tidal/dbTools";
 import { getWithDefault } from "./env";
 import { longWriteDbLock } from "./lock";
 import { logger } from "./logger";

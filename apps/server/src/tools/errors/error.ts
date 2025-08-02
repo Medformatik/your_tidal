@@ -7,6 +7,6 @@ export const ErrorTypeToHTTPCode = {
   UNKNOWN: 500,
 } as const;
 
-export class YourSpotifyError extends Error {
+export class YourTidalError extends Error {
   public type: keyof typeof ErrorTypeToHTTPCode = "UNKNOWN";
 }

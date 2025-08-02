@@ -4,7 +4,7 @@ import { Checkbox } from "@mui/material";
 import clsx from "clsx";
 import Text from "../../../components/Text";
 import { selectUser } from "../../../services/redux/modules/user/selector";
-import { getSpotifyLogUrl } from "../../../services/tools";
+import { getTidalLogUrl } from "../../../services/tools";
 import s from "../index.module.css";
 import { LocalStorage, REMEMBER_ME_KEY } from "../../../services/storage";
 import { useNavigate } from "../../../services/hooks/useNavigate";
@@ -20,7 +20,7 @@ export default function Login() {
     if (user) {
       navigate("/");
     } else if (LocalStorage.get(REMEMBER_ME_KEY) === "true") {
-      window.location.href = getSpotifyLogUrl();
+      window.location.href = getTidalLogUrl();
     }
   }, [navigate, user]);
 
@@ -43,7 +43,7 @@ export default function Login() {
         To access your personal dashboard, please login with your account
       </Text>
       <div>
-        <a className={s.link} href={getSpotifyLogUrl()}>
+        <a className={s.link} href={getTidalLogUrl()}>
           Login
         </a>
       </div>

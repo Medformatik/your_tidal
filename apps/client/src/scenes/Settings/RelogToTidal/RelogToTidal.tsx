@@ -1,16 +1,16 @@
 import { Button } from "@mui/material";
 import TitleCard from "../../../components/TitleCard";
-import { getSpotifyLogUrl } from "../../../services/tools";
+import { getTidalLogUrl } from "../../../services/tools";
 import SettingLine from "../SettingLine";
 
-export default function RelogToSpotify() {
+export default function RelogToTidal() {
   return (
     <TitleCard title="Miscellaneous">
       <SettingLine
-        left="Relog to Spotify"
+        left="Relog to TIDAL"
         right={
           <Button>
-            <a href={getSpotifyLogUrl()}>Relog</a>
+            <a href={getTidalLogUrl()}>Relog</a>
           </Button>
         }
       />

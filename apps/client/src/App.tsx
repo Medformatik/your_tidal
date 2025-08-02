@@ -84,7 +84,7 @@ function App() {
                 element={<RegistrationsDisabled />}
               />
               <Route
-                path="/oauth/spotify" // Error page when someone accidentally configures their API_ENDPOINT to point to the frontend instead of the backend
+                path="/oauth/tidal" // Error page when someone accidentally configures their API_ENDPOINT to point to the frontend instead of the backend
                 element={<ApiEndpointSetToFronted />}
               />
               <Route

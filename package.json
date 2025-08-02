@@ -1,8 +1,8 @@
 {
-  "name": "@your_spotify/root",
-  "version": "1.14.0",
-  "repository": "git@github.com:Yooooomi/your_spotify.git",
-  "author": "Timothee <timothee.boussus@gmail.com>",
+  "name": "@your_tidal/root",
+  "version": "0.1.0",
+  "repository": "git@github.com:medformatik/your_tidal.git",
+  "author": "Forked from Your Spotify by Timothee <timothee.boussus@gmail.com>",
   "private": true,
   "workspaces": [
     "apps/*"

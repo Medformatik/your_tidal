@@ -1,4 +1,4 @@
-# Your Spotify server
+# Your TIDAL server
 
 ## Table of Contents
 - [Prometheus](#prometheus)
@@ -8,7 +8,7 @@
   - [User Management](#user-management)
     - [Account](#account)
     - [Admin](#admin)
-  - [Spotify Integration](#spotify-integration)
+  - [TIDAL Integration](#tidal-integration)
     - [Playback](#playback)
     - [Playlist Management](#playlist-management)
   - [History & Statistics](#history--statistics)
@@ -29,9 +29,9 @@ You can access various prometheus metrics through `/metrics`:
 - **http_requests_total**: Total number of HTTP requests
 - **http_request_duration_nanoseconds**: Duration of HTTP requests in nanoseconds
 - **imports_total**: Total number of imports
-- **ingested_tracks_total**: Total number of ingested tracks from Spotify API
-- **ingested_albums_total**: Total number of ingested albums from Spotify API
-- **ingested_artists_total**: Total number of ingested artists from Spotify API
+- **ingested_tracks_total**: Total number of ingested tracks from TIDAL API
+- **ingested_albums_total**: Total number of ingested albums from TIDAL API
+- **ingested_artists_total**: Total number of ingested artists from TIDAL API
 
 You will need to define to environment variable in the server:
 
@@ -42,7 +42,7 @@ Those values are to be referenced in the configuration of your Prometheus instan
 
 ```yml
 scrape_configs:
-  - job_name: "your_spotify"
+  - job_name: "your_tidal"
     basic_auth:
       username: "myuser"      # PROMETHEUS_USERNAME
       password: "mypassword"  # PROMETHEUS_PASSWORD
@@ -56,29 +56,29 @@ scrape_configs:
 
 ### OAuth
 
-#### `GET /oauth/spotify`
-Initiates Spotify OAuth flow.
+#### `GET /oauth/tidal`
+Initiates TIDAL OAuth flow.
 
 **Response:**
-- Redirects to Spotify login page
+- Redirects to TIDAL login page
 - For development: Returns 204 if offline mode enabled
 
-#### `GET /oauth/spotify/callback`
-Handles Spotify OAuth callback.
+#### `GET /oauth/tidal/callback`
+Handles TIDAL OAuth callback.
 
 **Query Parameters:**
-- `code`: string - OAuth code from Spotify
+- `code`: string - OAuth code from TIDAL
 - `state`: string - State parameter for security
 
 **Response:**
 - Redirects to client application
 
-#### `GET /oauth/spotify/me`
-Gets current user's Spotify profile.
+#### `GET /oauth/tidal/me`
+Gets current user's TIDAL profile.
 
 **Response:** 
-- `200`: Spotify user profile
-- `500`: Error with code "SPOTIFY_ERROR"
+- `200`: TIDAL user profile
+- `500`: Error with code "TIDAL_ERROR"
 
 ## User Management
 
@@ -153,17 +153,17 @@ Delete user account (requires admin).
 - `404`: User not found
 - `500`: Error
 
-## Spotify Integration
+## TIDAL Integration
 
 ### Playback
 
-#### `POST /spotify/play`
+#### `POST /tidal/play`
 Start playback of a track.
 
 **Body:**
 ```json
 {
-  "id": string // Spotify track ID
+  "id": string // TIDAL track ID
 }
 ```
 
@@ -174,14 +174,14 @@ Start playback of a track.
 
 ### Playlist Management
 
-#### `GET /spotify/playlists`
-Get user's Spotify playlists.
+#### `GET /tidal/playlists`
+Get user's TIDAL playlists.
 
 **Response:**
-- `200`: Array of user's Spotify playlists
+- `200`: Array of user's TIDAL playlists
 
-#### `POST /spotify/playlist/create`
-Create a new Spotify playlist or add tracks to existing playlist.
+#### `POST /tidal/playlist/create`
+Create a new TIDAL playlist or add tracks to existing playlist.
 
 **Body:**
 ```json
@@ -219,7 +219,7 @@ Create a new Spotify playlist or add tracks to existing playlist.
 
 ## History & Statistics
 
-#### `GET /spotify/gethistory`
+#### `GET /tidal/gethistory`
 Get user's listening history.
 
 **Query Parameters:**
@@ -231,7 +231,7 @@ Get user's listening history.
 **Response:**
 - `200`: Array of listening history items
 
-#### `GET /spotify/listened_to`
+#### `GET /tidal/listened_to`
 Get count of songs listened to in a time period.
 
 **Query Parameters:**
@@ -241,7 +241,7 @@ Get count of songs listened to in a time period.
 **Response:**
 - `200`: `{ count: number }`
 
-#### `GET /spotify/most_listened`
+#### `GET /tidal/most_listened`
 Get most listened songs in a time period.
 
 **Query Parameters:**
@@ -252,7 +252,7 @@ Get most listened songs in a time period.
 **Response:**
 - `200`: Array of most listened songs with counts
 
-#### `GET /spotify/most_listened_artist`
+#### `GET /tidal/most_listened_artist`
 Get most listened artists in a time period.
 
 **Query Parameters:**
@@ -263,7 +263,7 @@ Get most listened artists in a time period.
 **Response:**
 - `200`: Array of most listened artists with counts
 
-#### `GET /spotify/songs_per`
+#### `GET /tidal/songs_per`
 Get song count per time unit.
 
 **Query Parameters:**
@@ -274,7 +274,7 @@ Get song count per time unit.
 **Response:**
 - `200`: Array of time periods with song counts
 
-#### `GET /spotify/time_per`
+#### `GET /tidal/time_per`
 Get listening time per time unit.
 
 **Query Parameters:**
@@ -285,7 +285,7 @@ Get listening time per time unit.
 **Response:**
 - `200`: Array of time periods with listening durations
 
-#### `GET /spotify/album_date_ratio`
+#### `GET /tidal/album_date_ratio`
 Get album release date distribution for listened tracks.
 
 **Query Parameters:**
@@ -296,7 +296,7 @@ Get album release date distribution for listened tracks.
 **Response:**
 - `200`: Distribution of tracks by album release date
 
-#### `GET /spotify/feat_ratio`
+#### `GET /tidal/feat_ratio`
 Get ratio of songs featuring multiple artists.
 
 **Query Parameters:**
@@ -307,7 +307,7 @@ Get ratio of songs featuring multiple artists.
 **Response:**
 - `200`: Ratio data for featured vs. non-featured tracks
 
-#### `GET /spotify/popularity_per`
+#### `GET /tidal/popularity_per`
 Get popularity metrics of listened tracks.
 
 **Query Parameters:**
@@ -318,7 +318,7 @@ Get popularity metrics of listened tracks.
 **Response:**
 - `200`: Popularity distribution over time
 
-#### `GET /spotify/different_artists_per`
+#### `GET /tidal/different_artists_per`
 Get count of unique artists listened to per time unit.
 
 **Query Parameters:**
@@ -329,7 +329,7 @@ Get count of unique artists listened to per time unit.
 **Response:**
 - `200`: Count of unique artists per time unit
 
-#### `GET /spotify/time_per_hour_of_day`
+#### `GET /tidal/time_per_hour_of_day`
 Get listening distribution by hour of day.
 
 **Query Parameters:**
@@ -339,7 +339,7 @@ Get listening distribution by hour of day.
 **Response:**
 - `200`: Distribution of listening time by hour
 
-#### `GET /spotify/best_artists_per`
+#### `GET /tidal/best_artists_per`
 Get top artists per time unit.
 
 **Query Parameters:**
@@ -352,7 +352,7 @@ Get top artists per time unit.
 
 ### Top Items
 
-#### `GET /spotify/top/songs`
+#### `GET /tidal/top/songs`
 Get top songs in a time period.
 
 **Query Parameters:**
@@ -365,7 +365,7 @@ Get top songs in a time period.
 **Response:**
 - `200`: Array of top song objects
 
-#### `GET /spotify/top/artists`
+#### `GET /tidal/top/artists`
 Get top artists in a time period.
 
 **Query Parameters:**
@@ -378,7 +378,7 @@ Get top artists in a time period.
 **Response:**
 - `200`: Array of top artist objects
 
-#### `GET /spotify/top/albums`
+#### `GET /tidal/top/albums`
 Get top albums in a time period.
 
 **Query Parameters:**
@@ -391,7 +391,7 @@ Get top albums in a time period.
 **Response:**
 - `200`: Array of top album objects
 
-#### `GET /spotify/top/hour-repartition/songs`
+#### `GET /tidal/top/hour-repartition/songs`
 Get top songs by hour of day.
 
 **Query Parameters:**
@@ -401,7 +401,7 @@ Get top songs by hour of day.
 **Response:**
 - `200`: Top songs for each hour of the day
 
-#### `GET /spotify/top/hour-repartition/albums`
+#### `GET /tidal/top/hour-repartition/albums`
 Get top albums by hour of day.
 
 **Query Parameters:**
@@ -411,7 +411,7 @@ Get top albums by hour of day.
 **Response:**
 - `200`: Top albums for each hour of the day
 
-#### `GET /spotify/top/hour-repartition/artists`
+#### `GET /tidal/top/hour-repartition/artists`
 Get top artists by hour of day.
 
 **Query Parameters:**
@@ -421,7 +421,7 @@ Get top artists by hour of day.
 **Response:**
 - `200`: Top artists for each hour of the day
 
-#### `GET /spotify/top/sessions`
+#### `GET /tidal/top/sessions`
 Get longest listening sessions.
 
 **Query Parameters:**
@@ -433,7 +433,7 @@ Get longest listening sessions.
 
 ### Collaborative Features
 
-#### `GET /spotify/collaborative/top/songs`
+#### `GET /tidal/collaborative/top/songs`
 Get shared top songs between multiple users.
 
 **Query Parameters:**
@@ -446,7 +446,7 @@ Get shared top songs between multiple users.
 **Response:**
 - `200`: Array of shared top songs
 
-#### `GET /spotify/collaborative/top/albums`
+#### `GET /tidal/collaborative/top/albums`
 Get shared top albums between multiple users.
 
 **Query Parameters:**
@@ -459,7 +459,7 @@ Get shared top albums between multiple users.
 **Response:**
 - `200`: Array of shared top albums
 
-#### `GET /spotify/collaborative/top/artists`
+#### `GET /tidal/collaborative/top/artists`
 Get shared top artists between multiple users.
 
 **Query Parameters:**

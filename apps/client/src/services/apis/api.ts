@@ -14,7 +14,7 @@ import {
   TrackWithAlbum,
   TrackInfo,
   TrackInfoWithFullTrack,
-  SpotifyMe,
+  TidalMe,
   CollaborativeMode,
   UnboxPromise,
   TrackWithFullAlbum,
@@ -202,11 +202,11 @@ export const api = {
   publicToken: null as string | null,
 
   version: () => get<{ update: boolean; version: string }>("/version"),
-  spotify: () => get("/oauth/spotify"),
+  tidal: () => get("/oauth/tidal"),
   logout: () => axios.post("/logout"),
   // eslint-disable-next-line no-restricted-globals
   me: () => get<{ status: true; user: User } | { status: false }>("/me"),
-  sme: () => get<SpotifyMe>("/oauth/spotify/me"),
+  sme: () => get<TidalMe>("/oauth/tidal/me"),
   globalPreferences: () => get<GlobalPreferences>("/global/preferences"),
   rename: (newName: string) => put("/rename", { newName }),
   getAccounts: () => get<AdminAccount[]>("/accounts"),
@@ -218,11 +218,11 @@ export const api = {
   setGlobalPreferences: (preferences: Partial<GlobalPreferences>) =>
     post<GlobalPreferences>("/global/preferences", preferences),
   play: (id: string) =>
-    axios.post("/spotify/play", {
+    axios.post("/tidal/play", {
       id,
     }),
   getTracks: (start: Date, end: Date, number: number, offset: number) =>
-    get<TrackInfoWithFullTrack[]>("/spotify/gethistory", {
+    get<TrackInfoWithFullTrack[]>("/tidal/gethistory", {
       number,
       offset,
       start,
@@ -230,7 +230,7 @@ export const api = {
     }),
   mostListened: (start: Date, end: Date, timeSplit: Timesplit) =>
     get<{ tracks: TrackWithAlbum[]; counts: number[] }[]>(
-      "/spotify/most_listened",
+      "/tidal/most_listened",
       {
         start,
         end,
@@ -239,7 +239,7 @@ export const api = {
     ),
   mostListenedArtist: (start: Date, end: Date, timeSplit: Timesplit) =>
     get<{ _id: DateId | undefined; artists: Artist[]; counts: number[] }[]>(
-      "/spotify/most_listened_artist",
+      "/tidal/most_listened_artist",
       {
         start,
         end,
@@ -247,13 +247,13 @@ export const api = {
       },
     ),
   listened_to: (start: Date, end: Date) =>
-    get("/spotify/listened_to", {
+    get("/tidal/listened_to", {
       start,
       end,
     }),
   songsPer: (start: Date, end: Date, timeSplit: Timesplit) =>
     get<{ count: number; _id: DateId | null; differents: number }[]>(
-      "/spotify/songs_per",
+      "/tidal/songs_per",
       {
         start,
         end,
@@ -261,7 +261,7 @@ export const api = {
       },
     ),
   timePer: (start: Date, end: Date, timeSplit: Timesplit) =>
-    get<{ count: number; _id: DateId | null }[]>("/spotify/time_per", {
+    get<{ count: number; _id: DateId | null }[]>("/tidal/time_per", {
       start,
       end,
       timeSplit,
@@ -280,14 +280,14 @@ export const api = {
         totalPeople: number;
         _id: DateId | null;
       }[]
-    >("/spotify/feat_ratio", {
+    >("/tidal/feat_ratio", {
       start,
       end,
       timeSplit,
     }),
   albumDateRatio: (start: Date, end: Date, timeSplit: Timesplit) =>
     get<{ count: number; totalYear: number; _id: DateId | null }[]>(
-      "/spotify/album_date_ratio",
+      "/tidal/album_date_ratio",
       {
         start,
         end,
@@ -296,7 +296,7 @@ export const api = {
     ),
   popularityPer: (start: Date, end: Date, timeSplit: Timesplit) =>
     get<{ count: number; totalPopularity: number; _id: DateId | null }[]>(
-      "/spotify/popularity_per",
+      "/tidal/popularity_per",
       {
         start,
         end,
@@ -305,7 +305,7 @@ export const api = {
     ),
   bestArtistsPer: (start: Date, end: Date, timeSplit: Timesplit) =>
     get<{ artists: Artist[]; counts: number[]; _id: DateId | null }[]>(
-      "/spotify/best_artists_per",
+      "/tidal/best_artists_per",
       {
         start,
         end,
@@ -320,7 +320,7 @@ export const api = {
         differents: number;
         _id: DateId | null;
       }[]
-    >("/spotify/different_artists_per", {
+    >("/tidal/different_artists_per", {
       start,
       end,
       timeSplit,
@@ -336,7 +336,7 @@ export const api = {
         _id: number;
         count: number;
       }[]
-    >("/spotify/time_per_hour_of_day", {
+    >("/tidal/time_per_hour_of_day", {
       start,
       end,
     }),
@@ -383,7 +383,7 @@ export const api = {
         artist: Artist;
         track: Track;
       }[]
-    >("/spotify/top/songs", {
+    >("/tidal/top/songs", {
       start,
       end,
       nb,
@@ -399,7 +399,7 @@ export const api = {
         artist: Artist;
         differents: number;
       }[]
-    >("/spotify/top/artists", {
+    >("/tidal/top/artists", {
       start,
       end,
       nb,
@@ -415,7 +415,7 @@ export const api = {
         artist: Artist;
         album: Album;
       }[]
-    >("/spotify/top/albums", {
+    >("/tidal/top/albums", {
       start,
       end,
       nb,
@@ -460,7 +460,7 @@ export const api = {
         string,
         number
       >)[]
-    >("/spotify/collaborative/top/songs", {
+    >("/tidal/collaborative/top/songs", {
       otherIds: ids,
       start,
       end,
@@ -473,7 +473,7 @@ export const api = {
     mode: CollaborativeMode,
   ) =>
     get<({ album: Album; artist: Artist } & Record<string, number>)[]>(
-      "/spotify/collaborative/top/albums",
+      "/tidal/collaborative/top/albums",
       {
         otherIds: ids,
         start,
@@ -488,7 +488,7 @@ export const api = {
     mode: CollaborativeMode,
   ) =>
     get<({ artist: Artist } & Record<string, number>)[]>(
-      "/spotify/collaborative/top/artists",
+      "/tidal/collaborative/top/artists",
       {
         otherIds: ids,
         start,
@@ -506,7 +506,7 @@ export const api = {
         items: { itemId: string; total: number }[];
         full_items: Record<string, Track>;
       }[]
-    >("/spotify/top/hour-repartition/songs", { start, end }),
+    >("/tidal/top/hour-repartition/songs", { start, end }),
   getBestAlbumsOfHour: (start: Date, end: Date) =>
     get<
       {
@@ -515,7 +515,7 @@ export const api = {
         items: { itemId: string; total: number }[];
         full_items: Record<string, Album>;
       }[]
-    >("/spotify/top/hour-repartition/albums", { start, end }),
+    >("/tidal/top/hour-repartition/albums", { start, end }),
   getBestArtistsOfHour: (start: Date, end: Date) =>
     get<
       {
@@ -524,13 +524,13 @@ export const api = {
         items: { itemId: string; total: number }[];
         full_items: Record<string, Artist>;
       }[]
-    >("/spotify/top/hour-repartition/artists", { start, end }),
-  getPlaylists: () => get<Playlist[]>("/spotify/playlists"),
+    >("/tidal/top/hour-repartition/artists", { start, end }),
+  getPlaylists: () => get<Playlist[]>("/tidal/playlists"),
   addToPlaylist: (
     id: string | undefined,
     name: string | undefined,
     context: PlaylistContext,
-  ) => post("/spotify/playlist/create", { playlistId: id, name, ...context }),
+  ) => post("/tidal/playlist/create", { playlistId: id, name, ...context }),
   getTrackDetails: (ids: string[]) => get<Track[]>(`/track/${ids.join(",")}`),
   getTrackStats: (id: string) =>
     get<TrackStatsResponse | { code: "NEVER_LISTENED" }>(`/track/${id}/stats`),
@@ -559,7 +559,19 @@ export const api = {
           }[];
         };
       }[]
-    >("/spotify/top/sessions", { start, end }),
+    >("/tidal/top/sessions", { start, end }),
+  
+  // Recently played and session tracking endpoints
+  getRecentlyPlayed: (number: number = 20, offset: number = 0) =>
+    get<any[]>("/tidal/recently-played", { number, offset }),
+  
+  getCurrentSession: () => get<any>("/tidal/current-session"),
+  
+  startSession: (trackId: string, startedAt?: string) =>
+    post("/tidal/session/start", { trackId, startedAt }),
+  
+  endSession: (trackId: string, playedAt?: string, endedAt?: string, duration?: number) =>
+    post("/tidal/session/end", { trackId, playedAt, endedAt, duration }),
 };
 
 export const DEFAULT_ITEMS_TO_LOAD = 20;

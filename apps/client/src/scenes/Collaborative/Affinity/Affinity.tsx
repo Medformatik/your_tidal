@@ -87,7 +87,7 @@ export default function Affinity() {
       <Header
         hideInterval
         title={<div className={s.title}>Affinity {tooltip}</div>}
-        subtitle="Compute the affinity you have with somebody using YourSpotify"
+        subtitle="Compute the affinity you have with somebody using YourTIDAL"
       />
       <div className={s.content}>
         <div>

@@ -21,19 +21,19 @@ export class Metrics {
 
   static ingestedTracksTotal = new Counter({
     name: "ingested_tracks_total",
-    help: "Total number of ingested tracks from Spotify API",
+    help: "Total number of ingested tracks from TIDAL API",
     labelNames: ["user"] as const,
   });
 
   static ingestedAlbumsTotal = new Counter({
     name: "ingested_albums_total",
-    help: "Total number of ingested albums from Spotify API",
+    help: "Total number of ingested albums from TIDAL API",
     labelNames: ["user"] as const,
   });
 
   static ingestedArtistsTotal = new Counter({
     name: "ingested_artists_total",
-    help: "Total number of ingested artists from Spotify API",
+    help: "Total number of ingested artists from TIDAL API",
     labelNames: ["user"] as const,
   });
 }

@@ -64,7 +64,7 @@ export const getTrackRecentHistory = async (user: User, trackId: string) =>
     .limit(10)
     .sort({ played_at: -1 });
 
-export const getTrackBySpotifyId = (id: string) => TrackModel.findOne({ id });
+export const getTrackByTidalId = (id: string) => TrackModel.findOne({ id });
 
 export const checkBlacklistConsistency = () =>
   InfosModel.updateMany(

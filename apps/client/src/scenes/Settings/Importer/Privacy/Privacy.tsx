@@ -31,11 +31,11 @@ export default function Privacy() {
   return (
     <div>
       <Text className={s.import}>
-        Here you can import previous data from Spotify privacy data. You can
+        Here you can import previous data from TIDAL privacy data. You can
         request them{" "}
         <a
           target="_blank"
-          href="https://www.spotify.com/us/account/privacy/"
+          href="https://tidal.com/privacy"
           rel="noreferrer">
           here
         </a>

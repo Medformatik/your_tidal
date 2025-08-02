@@ -1,6 +1,6 @@
 import { Schema } from "mongoose";
-import { SpotifyAlbum } from "./album";
-import { SpotifyArtist } from "./artist";
+import { TidalAlbum } from "./album";
+import { TidalArtist } from "./artist";
 
 export interface Track {
   album: string;
@@ -22,14 +22,37 @@ export interface Track {
   uri: string;
 }
 
-export type SpotifyTrack = Omit<Track, "artists" | "album"> & {
-  artists: SpotifyArtist[];
-  album: SpotifyAlbum;
+export type TidalTrack = {
+  id: string;
+  type: string;
+  attributes: {
+    title: string;
+    duration: number;
+    trackNumber?: number;
+    volumeNumber?: number;
+    explicit: boolean;
+    isrc?: string;
+    popularity?: number;
+  };
+  relationships: {
+    artists: {
+      data: Array<{
+        id: string;
+        type: string;
+      }>;
+    };
+    album: {
+      data: {
+        id: string;
+        type: string;
+      };
+    };
+  };
 };
 
 export interface RecentlyPlayedTrack {
   played_at: string;
-  track: SpotifyTrack;
+  track: TidalTrack;
 }
 
 export const TrackSchema = new Schema<Track>(

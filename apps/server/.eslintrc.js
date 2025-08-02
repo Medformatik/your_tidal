@@ -1,3 +1,3 @@
 module.exports = {
-  extends: [require.resolve("@your_spotify/dev/.eslintrc.js")],
+  extends: [require.resolve("@your_tidal/dev/.eslintrc.js")],
 };

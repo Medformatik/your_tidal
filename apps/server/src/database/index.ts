@@ -13,7 +13,7 @@ const TRIES = 10;
 const WAIT_MS = 30_000;
 
 export const connect = async () => {
-  const fallbackConnection = "mongodb://mongo:27017/your_spotify";
+  const fallbackConnection = "mongodb://mongo:27017/your_tidal";
   const endpoint = getWithDefault("MONGO_ENDPOINT", fallbackConnection);
   logger.info(`Trying to connect to database at ${endpoint}`);
   let client: Mongoose | undefined;
@@ -24,7 +24,7 @@ export const connect = async () => {
         connectTimeoutMS: 3000,
       });
     } catch (e) {
-      lastError = e;
+      lastError = e instanceof Error ? e : new Error(String(e));
       logger.error(`Failed to connect to database, try ${i + 1}/${TRIES}`);
       await wait(WAIT_MS);
     }

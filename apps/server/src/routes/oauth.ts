@@ -15,8 +15,8 @@ import {
   withGlobalPreferences,
   withHttpClient,
 } from "../tools/middleware";
-import { Spotify } from "../tools/oauth/Provider";
-import { GlobalPreferencesRequest, SpotifyRequest } from "../tools/types";
+import { TIDAL } from "../tools/oauth/Provider";
+import { GlobalPreferencesRequest, TIDALRequest } from "../tools/types";
 import { getPrivateData } from "../database/queries/privateData";
 
 export const router = Router();
@@ -34,12 +34,12 @@ function storeTokenInCookie(
 }
 
 const OAUTH_COOKIE_NAME = "oauth";
-const spotifyCallbackOAuthCookie = z.object({
+const tidalCallbackOAuthCookie = z.object({
   state: z.string(),
 });
-type OAuthCookie = z.infer<typeof spotifyCallbackOAuthCookie>;
+type OAuthCookie = z.infer<typeof tidalCallbackOAuthCookie>;
 
-router.get("/spotify", async (req, res) => {
+router.get("/tidal", async (req, res) => {
   const isOffline = get("OFFLINE_DEV_ID");
   if (isOffline) {
     const privateData = await getPrivateData();
@@ -53,7 +53,7 @@ router.get("/spotify", async (req, res) => {
     res.status(204).end();
     return;
   }
-  const { url, state } = await Spotify.getRedirect();
+  const { url, state } = await TIDAL.getRedirect();
   const oauthCookie: OAuthCookie = {
     state,
   };
@@ -67,17 +67,17 @@ router.get("/spotify", async (req, res) => {
   res.redirect(url);
 });
 
-const spotifyCallback = z.object({
+const tidalCallback = z.object({
   code: z.string(),
   state: z.string(),
 });
 
-router.get("/spotify/callback", withGlobalPreferences, async (req, res) => {
+router.get("/tidal/callback", withGlobalPreferences, async (req, res) => {
   const { query, globalPreferences } = req as GlobalPreferencesRequest;
-  const { code, state } = validate(query, spotifyCallback);
+  const { code, state } = validate(query, tidalCallback);
 
   try {
-    const cookie = spotifyCallbackOAuthCookie.parse(
+    const cookie = tidalCallbackOAuthCookie.parse(
       req.cookies[OAUTH_COOKIE_NAME],
     );
 
@@ -85,19 +85,19 @@ router.get("/spotify/callback", withGlobalPreferences, async (req, res) => {
       throw new Error("State does not match");
     }
 
-    const infos = await Spotify.exchangeCode(code, cookie.state);
+    const infos = await TIDAL.exchangeCode(code, cookie.state);
 
-    const client = Spotify.getHttpClient(infos.accessToken);
-    const { data: spotifyMe } = await client.get("/me");
-    let user = await getUserFromField("spotifyId", spotifyMe.id, false);
+    const client = TIDAL.getHttpClient(infos.accessToken);
+    const { data: tidalMe } = await client.get("/v2/me");
+    let user = await getUserFromField("tidalId", tidalMe.data.id, false);
     if (!user) {
       if (!globalPreferences.allowRegistrations) {
         return res.redirect(`${get("CLIENT_ENDPOINT")}/registrations-disabled`);
       }
       const nbUsers = await getUserCount();
       user = await createUser(
-        spotifyMe.display_name,
-        spotifyMe.id,
+        tidalMe.data.attributes.username || tidalMe.data.attributes.firstName || "TIDAL User",
+        tidalMe.data.id,
         nbUsers === 0,
       );
     }
@@ -122,14 +122,14 @@ router.get("/spotify/callback", withGlobalPreferences, async (req, res) => {
   return res.redirect(get("CLIENT_ENDPOINT"));
 });
 
-router.get("/spotify/me", logged, withHttpClient, async (req, res) => {
-  const { client } = req as SpotifyRequest;
+router.get("/tidal/me", logged, withHttpClient, async (req, res) => {
+  const { client } = req as TIDALRequest;
 
   try {
-    const me = await client.me();
+    const { data: me } = await client.raw("/v2/users/me?countryCode=US");
     res.status(200).send(me);
   } catch (e) {
     logger.error(e);
-    res.status(500).send({ code: "SPOTIFY_ERROR" });
+    res.status(500).send({ code: "TIDAL_ERROR" });
   }
 });

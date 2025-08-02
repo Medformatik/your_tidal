@@ -1,4 +1,4 @@
-import { Album, Artist, SpotifyImage } from "./types";
+import { Album, Artist, TidalImage } from "./types";
 
 const NO_DATA_IMAGE = "/no_data_faded.png";
 const PIXEL_RATIO = window.devicePixelRatio ?? 1;
@@ -6,7 +6,7 @@ const PIXEL_RATIO = window.devicePixelRatio ?? 1;
 export const getImage = (value: Artist | Album | undefined) =>
   value?.images[0]?.url || NO_DATA_IMAGE;
 
-export function getAtLeastImage(images: SpotifyImage[], size: number) {
+export function getAtLeastImage(images: TidalImage[], size: number) {
   const realSize = size * PIXEL_RATIO;
   const sorted = [...images].sort(
     (a, b) => a.width + a.height - (b.width + b.height),
@@ -21,7 +21,7 @@ export function getAtLeastImage(images: SpotifyImage[], size: number) {
 // @ts-ignore
 export const getApiEndpoint = () => window.API_ENDPOINT as string;
 
-export const getSpotifyLogUrl = () => `${getApiEndpoint()}/oauth/spotify`;
+export const getTidalLogUrl = () => `${getApiEndpoint()}/oauth/tidal`;
 
 export const compact = <T>(arr: (T | undefined)[]): T[] =>
   arr.filter(a => a != null) as T[];

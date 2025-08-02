@@ -1,7 +1,7 @@
 import { Schema } from "mongoose";
 import { Artist } from "./artist";
 import { Track } from "./track";
-import { SpotifyImage } from "./types";
+import { TidalImage } from "./types";
 
 export interface Album {
   album_type: string;
@@ -13,7 +13,7 @@ export interface Album {
   genres: string[];
   href: string;
   id: string;
-  images: SpotifyImage[];
+  images: TidalImage[];
   name: string;
   popularity: number;
   release_date: string;
@@ -22,9 +22,27 @@ export interface Album {
   uri: string;
 }
 
-export type SpotifyAlbum = Omit<Album, "artists"> & {
-  artists: Artist[];
-  tracks: Track[];
+export type TidalAlbum = {
+  id: string;
+  type: string;
+  attributes: {
+    title: string;
+    releaseDate?: string;
+    numberOfTracks?: number;
+    numberOfVideos?: number;
+    duration?: number;
+    explicit: boolean;
+    upc?: string;
+    popularity?: number;
+  };
+  relationships: {
+    artists: {
+      data: Array<{
+        id: string;
+        type: string;
+      }>;
+    };
+  };
 };
 
 export const AlbumSchema = new Schema<Album>(

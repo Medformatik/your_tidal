@@ -1,6 +1,6 @@
-import { YourSpotifyError } from "./error";
+import { YourTidalError } from "./error";
 
-class DatabaseError extends YourSpotifyError {}
+class DatabaseError extends YourTidalError {}
 
 export class NoResult extends DatabaseError {
   constructor() {

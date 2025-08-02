@@ -31,7 +31,7 @@ export default function FullPrivacy() {
   return (
     <div>
       <Text className={s.import}>
-        Here you can import previous data from Spotify privacy data. This is the
+        Here you can import previous data from TIDAL privacy data. This is the
         data you requested by mail specifically asking for extended data. It
         usually takes a few weeks for them to get back to you. Once received,
         upload here your files beginning with&nbsp;
@@ -41,7 +41,7 @@ export default function FullPrivacy() {
         Read more&nbsp;
         <a
           target="_blank"
-          href="https://www.spotify.com/account/privacy/"
+          href="https://tidal.com/privacy"
           rel="noreferrer">
           here
         </a>

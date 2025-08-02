@@ -1,17 +1,13 @@
-import { get } from "../env";
+import { get } from '../env';
 
 export const credentials = {
-  spotify: {
-    public: get("SPOTIFY_PUBLIC"),
-    secret: get("SPOTIFY_SECRET"),
+  tidal: {
+    clientId: get('TIDAL_CLIENT_ID'),
+    clientSecret: get('TIDAL_CLIENT_SECRET'),
     scopes: [
-      "user-read-private",
-      "user-read-email",
-      "user-read-recently-played",
-      "user-modify-playback-state",
-      "playlist-modify-private",
-      "playlist-modify-public",
-    ].join(" "),
-    redirectUri: `${get("API_ENDPOINT")}/oauth/spotify/callback`,
+      'r_usr', // Read user profile, playlists, and collections
+      'w_usr', // Create playlists and add tracks (optional feature)
+    ].join(' '),
+    redirectUri: `${get('API_ENDPOINT')}/oauth/tidal/callback`,
   },
 };

@@ -35,13 +35,13 @@ export const getAllUsers = (includeTokens: boolean) =>
 
 export const createUser = (
   username: string,
-  spotifyId: string,
+  tidalId: string,
   admin: boolean,
 ) =>
   UserModel.create({
     username,
     admin,
-    spotifyId,
+    tidalId,
     accessToken: "",
     refreshToken: "",
     expiresIn: 0,

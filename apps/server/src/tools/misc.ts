@@ -289,7 +289,7 @@ export const retryPromise = async <T>(
       const res = await fn();
       return res;
     } catch (e) {
-      lastError = e;
+      lastError = e instanceof Error ? e : new Error(String(e));
       logger.error(
         `Retrying crashed promise, ${i + 1}/${max}${
           isLastTry ? "" : `, retrying in ${timeSeconds} seconds...`

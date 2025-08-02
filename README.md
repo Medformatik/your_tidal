@@ -3,7 +3,7 @@
 **YourTIDAL** is a self-hosted application that tracks what you listen and offers you a dashboard to explore statistics about it!
 It's composed of a web server which polls the TIDAL API every now and then and a web application on which you can explore your statistics.
 
-> This is a fork of [YourTIDAL](https://github.com/Medformatik/your_tidal) adapted to work with TIDAL instead of TIDAL.
+> This is a fork of [Your Spotify](https://github.com/Yooooomi/your_spotify) adapted to work with TIDAL instead of Spotify.
 
 # Table of contents
 

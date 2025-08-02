@@ -12,12 +12,26 @@ on:
       - yarn.lock
     branches:
       - master
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual trigger'
+        required: false
+        default: 'Manual nightly build'
+        type: string
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Log build trigger
+        run: |
+          echo "Build triggered by: ${{ github.event_name }}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Manual trigger reason: ${{ github.event.inputs.reason }}"
+          fi
+
       - name: Checkout
         uses: actions/checkout@v4
 

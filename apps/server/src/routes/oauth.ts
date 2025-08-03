@@ -36,6 +36,7 @@ function storeTokenInCookie(
 const OAUTH_COOKIE_NAME = "oauth";
 const tidalCallbackOAuthCookie = z.object({
   state: z.string(),
+  codeVerifier: z.string(),
 });
 type OAuthCookie = z.infer<typeof tidalCallbackOAuthCookie>;
 
@@ -53,9 +54,10 @@ router.get("/tidal", async (req, res) => {
     res.status(204).end();
     return;
   }
-  const { url, state } = await TIDAL.getRedirect();
+  const { url, state, codeVerifier } = await TIDAL.getRedirect();
   const oauthCookie: OAuthCookie = {
     state,
+    codeVerifier,
   };
 
   res.cookie(OAUTH_COOKIE_NAME, oauthCookie, {
@@ -85,7 +87,7 @@ router.get("/tidal/callback", withGlobalPreferences, async (req, res) => {
       throw new Error("State does not match");
     }
 
-    const infos = await TIDAL.exchangeCode(code, cookie.state);
+    const infos = await TIDAL.exchangeCode(code, cookie.codeVerifier);
 
     const client = TIDAL.getHttpClient(infos.accessToken);
     const { data: tidalMe } = await client.get("/v2/me");

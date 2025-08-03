@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Axios from "axios";
-import { generateRandomString, sha256 } from "../crypto";
-import { credentials } from "./credentials";
+import Axios from 'axios';
+import {
+  generateCodeChallenge,
+  generateCodeVerifier,
+  generateRandomString,
+  sha256,
+} from '../crypto';
+import { credentials } from './credentials';
 
 export class Provider {
   static getRedirect = () => {};
@@ -24,35 +29,41 @@ export class TIDAL extends Provider {
     const { scopes } = credentials.tidal;
     const { redirectUri } = credentials.tidal;
 
-    const authorizeUrl = new URL("https://login.tidal.com/authorize");
+    const authorizeUrl = new URL('https://login.tidal.com/authorize');
     const state = generateRandomString(32);
+    const codeVerifier = generateCodeVerifier();
+    const codeChallenge = await generateCodeChallenge(codeVerifier);
 
-    authorizeUrl.searchParams.append("client_id", credentials.tidal.clientId);
-    authorizeUrl.searchParams.append("response_type", "code");
-    authorizeUrl.searchParams.append("redirect_uri", redirectUri);
-    authorizeUrl.searchParams.append("state", state);
-    authorizeUrl.searchParams.append("scope", scopes);
+    authorizeUrl.searchParams.append('client_id', credentials.tidal.clientId);
+    authorizeUrl.searchParams.append('response_type', 'code');
+    authorizeUrl.searchParams.append('redirect_uri', redirectUri);
+    authorizeUrl.searchParams.append('state', state);
+    authorizeUrl.searchParams.append('scope', scopes);
+    authorizeUrl.searchParams.append('code_challenge', codeChallenge);
+    authorizeUrl.searchParams.append('code_challenge_method', 'S256');
+    // authorizeUrl.searchParams.append("geo", "US");
 
     return {
       url: authorizeUrl.toString(),
       state,
+      codeVerifier,
     };
   };
 
-  static exchangeCode = async (code: string, state: string) => {
+  static exchangeCode = async (code: string, codeVerifier: string) => {
     const { data } = await Axios.post(
-      "https://auth.tidal.com/v1/oauth2/token",
+      'https://auth.tidal.com/v1/oauth2/token',
       null,
       {
         params: {
-          grant_type: "authorization_code",
+          grant_type: 'authorization_code',
           code,
           redirect_uri: credentials.tidal.redirectUri,
           client_id: credentials.tidal.clientId,
-          client_secret: credentials.tidal.clientSecret,
+          code_verifier: codeVerifier,
         },
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
       },
     );
@@ -66,18 +77,18 @@ export class TIDAL extends Provider {
 
   static refresh = async (refresh: string) => {
     const { data } = await Axios.post(
-      "https://auth.tidal.com/v1/oauth2/token",
+      'https://auth.tidal.com/v1/oauth2/token',
       null,
       {
         params: {
-          grant_type: "refresh_token",
+          grant_type: 'refresh_token',
           refresh_token: refresh,
         },
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          'Content-Type': 'application/x-www-form-urlencoded',
           Authorization: `Basic ${Buffer.from(
             `${credentials.tidal.clientId}:${credentials.tidal.clientSecret}`,
-          ).toString("base64")}`,
+          ).toString('base64')}`,
         },
       },
     );
@@ -92,9 +103,9 @@ export class TIDAL extends Provider {
     Axios.create({
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        Accept: "application/vnd.api+json",
-        "Content-Type": "application/vnd.api+json",
+        Accept: 'application/vnd.api+json',
+        'Content-Type': 'application/vnd.api+json',
       },
-      baseURL: "https://openapi.tidal.com",
+      baseURL: 'https://openapi.tidal.com',
     });
 }

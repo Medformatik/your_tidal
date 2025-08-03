@@ -348,7 +348,7 @@ export class TidalAPI {
             id: trackId,
           })),
           meta: {
-            positionBefore: 'end', // Add to end of playlist as required by API spec
+            positionBefore: '',
           },
         },
         {

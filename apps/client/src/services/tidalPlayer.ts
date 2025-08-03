@@ -1,15 +1,15 @@
 import * as auth from '@tidal-music/auth';
-import { 
-  bootstrap, 
-  play, 
-  pause, 
-  load, 
+import {
+  bootstrap,
+  play,
+  pause,
+  load,
   seek,
   reset,
   getPlaybackState,
   getMediaProduct,
   setCredentialsProvider,
-  events 
+  events,
 } from '@tidal-music/player';
 import { api } from './apis/api';
 
@@ -19,7 +19,7 @@ enum PlaybackState {
   PLAYING = 'PLAYING',
   PAUSED = 'PAUSED',
   STALLED = 'STALLED',
-  NOT_PLAYING = 'NOT_PLAYING'
+  NOT_PLAYING = 'NOT_PLAYING',
 }
 
 interface TidalPlayerConfig {
@@ -47,16 +47,24 @@ class TidalPlayerService {
         clientId: config.clientId,
         clientSecret: config.clientSecret,
         credentialsStorageKey: 'tidal-credentials',
-        scopes: ['r_usr', 'w_usr'], // Read user data + playlist creation capabilities
+        scopes: [
+          'user.read',
+          'playlists.read',
+          'playlists.write',
+          'collection.read',
+          'search.read',
+          'r_usr',
+          'w_usr',
+        ],
       });
 
       // Set credentials provider first
       setCredentialsProvider(auth.credentialsProvider);
-      
+
       // Initialize Player using bootstrap function
       await bootstrap({
         outputDevices: true,
-        players: []
+        players: [],
       });
 
       // Set up event listeners
@@ -73,7 +81,7 @@ class TidalPlayerService {
   // Event handler for player events
   private handlePlayerEvent(event: any) {
     console.log('TIDAL Player Event:', event);
-    
+
     switch (event.type) {
       case 'playback-state-changed':
         this.handlePlaybackStateChanged(event.data);
@@ -92,7 +100,7 @@ class TidalPlayerService {
     events.addEventListener('playback-state-changed', (event: any) => {
       console.log('Playback state changed:', event.detail);
       const state = event.detail.playbackState;
-      
+
       if (state === 'PLAYING' && this.currentTrackId) {
         this.playbackStartTime = new Date();
         this.recordPlaybackStart();
@@ -127,11 +135,11 @@ class TidalPlayerService {
         productId: trackId,
         productType: 'track',
         sourceId: trackId,
-        sourceType: 'track'
+        sourceType: 'track',
       });
 
       await play();
-      
+
       this.currentTrackId = trackId;
       console.log(`Playing track: ${trackId}`);
     } catch (error) {
@@ -143,15 +151,15 @@ class TidalPlayerService {
   // Pause playback
   async pausePlayback() {
     if (!this.isInitialized) return;
-    
+
     await pause();
     this.recordPlaybackEnd();
   }
 
-  // Resume playback  
+  // Resume playback
   async resume() {
     if (!this.isInitialized) return;
-    
+
     await play();
     this.playbackStartTime = new Date();
   }
@@ -159,7 +167,7 @@ class TidalPlayerService {
   // Skip to next track
   async skipToNext() {
     if (!this.isInitialized) return;
-    
+
     this.recordPlaybackEnd();
     // Note: skipToNext would need to be imported if available in the new API
     console.log('Skip to next not implemented in current API');
@@ -168,7 +176,7 @@ class TidalPlayerService {
   // Seek to position
   async seekTo(position: number) {
     if (!this.isInitialized) return;
-    
+
     await seek(position);
   }
 
@@ -213,7 +221,7 @@ class TidalPlayerService {
           startedAt: this.playbackStartTime?.toISOString(),
         }),
       });
-      
+
       console.log(`Started tracking playback for ${this.currentTrackId}`);
     } catch (error) {
       console.error('Failed to record playback start:', error);
@@ -244,8 +252,10 @@ class TidalPlayerService {
           duration: Math.floor(duration / 1000), // Convert to seconds
         }),
       });
-      
-      console.log(`Recorded playback for ${this.currentTrackId}, duration: ${duration}ms`);
+
+      console.log(
+        `Recorded playback for ${this.currentTrackId}, duration: ${duration}ms`,
+      );
     } catch (error) {
       console.error('Failed to record playback end:', error);
     }
@@ -256,17 +266,19 @@ class TidalPlayerService {
   // Handle playback state changes
   private handlePlaybackStateChanged(state: any) {
     console.log('Playback state changed to:', state);
-    
+
     // Emit custom events for the application to listen to
-    window.dispatchEvent(new CustomEvent('tidalPlaybackStateChanged', {
-      detail: { state, trackId: this.currentTrackId }
-    }));
+    window.dispatchEvent(
+      new CustomEvent('tidalPlaybackStateChanged', {
+        detail: { state, trackId: this.currentTrackId },
+      }),
+    );
   }
 
   // Handle media product transitions
   private handleMediaProductTransition(data: any) {
     console.log('Media product transition:', data);
-    
+
     if (data.to) {
       this.currentTrackId = data.to.id;
       this.playbackStartTime = new Date();
@@ -279,9 +291,11 @@ class TidalPlayerService {
     }
 
     // Emit custom event
-    window.dispatchEvent(new CustomEvent('tidalTrackChanged', {
-      detail: { from: data.from, to: data.to }
-    }));
+    window.dispatchEvent(
+      new CustomEvent('tidalTrackChanged', {
+        detail: { from: data.from, to: data.to },
+      }),
+    );
   }
 
   // Clean up

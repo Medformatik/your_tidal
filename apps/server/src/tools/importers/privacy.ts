@@ -188,7 +188,7 @@ export class PrivacyImporter
       attributes: {
         ...found.attributes,
         explicit: false, // Default value since TidalTrackResource doesn't include this
-        duration: found.attributes.duration || 0,
+        duration: Number(found.attributes.duration) || 0,
       },
       relationships: {
         artists: found.relationships?.artists || { data: [] },

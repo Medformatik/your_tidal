@@ -201,7 +201,7 @@ export class FullPrivacyImporter
         attributes: {
           ...searchedItem.attributes,
           explicit: false, // Default value since TidalTrackResource doesn't include this
-          duration: searchedItem.attributes.duration || 0,
+          duration: Number(searchedItem.attributes.duration) || 0,
         },
         relationships: {
           artists: searchedItem.relationships?.artists || { data: [] },

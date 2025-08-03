@@ -12,7 +12,7 @@ export const credentials = {
       'search.read',         // For search functionality
       'r_usr',              // Required for user-related read operations
       'w_usr'               // Required for user-related write operations
-    ].join(' '),
+    ].join(','),
     redirectUri: `${get('API_ENDPOINT')}/oauth/tidal/callback`,
   },
 };

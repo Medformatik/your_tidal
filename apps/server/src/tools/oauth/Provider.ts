@@ -106,6 +106,6 @@ export class TIDAL extends Provider {
         Accept: 'application/vnd.api+json',
         'Content-Type': 'application/vnd.api+json',
       },
-      baseURL: 'https://openapi.tidal.com',
+      baseURL: 'https://openapi.tidal.com/v2',
     });
 }

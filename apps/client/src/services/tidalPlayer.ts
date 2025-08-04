@@ -53,8 +53,6 @@ class TidalPlayerService {
           'playlists.write',
           'collection.read',
           'search.read',
-          'r_usr',
-          'w_usr',
         ],
       });
 
